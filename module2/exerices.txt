@@ -1,0 +1,6 @@
+Unicode UTF is a way to represent binaray/hex numbers to human readable characters
+%3Cscript%3Ealert%28document%29%3C%2Fscipt%3E
+
+RESt is an API which is used to access content from a server via a URL. GET POST PUT DELETE are accepted
+
+Find sensitive data, look for errors in the code, find code which they know have vulnerabilities. 
