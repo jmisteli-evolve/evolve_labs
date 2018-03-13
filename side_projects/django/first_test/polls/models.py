@@ -5,12 +5,15 @@ from django.utils import timezone
 # Create your models here
 class Question(models.Model):
 	def __str__(self):
-		return self.question_test
-	question_test = models.CharField(max_length=200)
+		return self.question_text
+	question_text = models.CharField(max_length=200)
 	pub_date = models.DateTimeField('date published')
 	def was_published_recently(self):
 		now = timezone.now()
-		return  timezone.now() - datetime.timedelta(days=1) <= self.pub_date <= now 
+		if self.pub_date >= now - datetime.timedelta(days=1) and self.pub_date <= now:
+			return True
+		else:
+			return False
 class Choice(models.Model):
 	def __str__(self):
 		return self.choice_text
