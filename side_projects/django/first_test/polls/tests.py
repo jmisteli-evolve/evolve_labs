@@ -1,7 +1,7 @@
 from django.test import TestCase
 import datetime
 from django.utils import timezone
-from .models import Question
+from .models import Question, Choice
 from django.urls import reverse
 
 class QuestionModelsTests(TestCase):
@@ -23,7 +23,9 @@ class QuestionModelsTests(TestCase):
 def create_question(question_text, days):
 	time = timezone.now() + datetime.timedelta(days=days)
 	return Question.objects.create(question_text=question_text, pub_date=time)
-
+def create_choice(choice_text, question):
+	return Choice.objects.create(question=question, choice_text=choice_text, votes=0)
+	
 class QuestionIndexViewTests(TestCase):
 	def test_no_question(self):
 		response = self.client.get(reverse('polls:index'))
@@ -53,7 +55,6 @@ class QuestionIndexViewTests(TestCase):
 class QuestionDetailViewTests(TestCase):
 	def test_future_question(self):
 		future_q = create_question("Future Question",10)
-	
 		url =reverse('polls:detail', args=(future_q.id,))
 		res = self.client.get(url)
 		self.assertEqual(res.status_code, 404)
@@ -61,3 +62,17 @@ class QuestionDetailViewTests(TestCase):
 		past_q = create_question("Past Question", -10)
 		res = self.client.get(reverse("polls:detail", args=(past_q.id,)))
 		self.assertContains(res, past_q.question_text)
+
+class QuestionDetailResultView(TestCase):
+	def test_future_question(self):
+		future_q = create_question("Future Question", 10)
+		res = self.client.get(reverse("polls:results", args=(future_q.id,)))
+		self.assertEqual(res.status_code, 404)
+
+	def test_past_questions(self):
+		past_q = create_question("Past Question", -10)
+		first_choice = crea
+		res = self.client.get(reverse("polls:results", args=(past_q.id,)))
+		self.assertEqual(res.status_code, 200)
+		self.assertContains(res, past_q.question_text)
+		print( past_q.choice_set.all())

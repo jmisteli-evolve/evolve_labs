@@ -12,22 +12,26 @@ from django.utils import timezone
 class IndexView(generic.ListView):
 	template_name = 'polls/index.html'
 	context_object_name = 'latest_q_list'
-
 	def get_queryset(self):
 		"""Return the last 5 published question"""
 		return Question.objects.filter(
 			pub_date__lte= timezone.now()
+			).filter(
+			choice = 1
 			).order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
 	model = Question
 	template_name = 'polls/details.html'
 	def get_queryset(self):
-		return Question.objects.filter(pub_date__lte=timezone.now())
+		return Question.objects.filter(
+			pub_date__lte=timezone.now())
 
 class ResultsView(generic.DetailView):
 	model = Question
 	template_name = 'polls/results.html'
+	def get_queryset(self):
+		return Question.objects.filter(pub_date__lte=timezone.now())
 
 # def index(request):
 # 	latest_q_list = Question.objects.order_by('-pub_date')[:5]

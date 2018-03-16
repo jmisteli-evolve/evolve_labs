@@ -14,6 +14,7 @@ class Question(models.Model):
 			return True
 		else:
 			return False
+			
 class Choice(models.Model):
 	def __str__(self):
 		return self.choice_text
